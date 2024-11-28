@@ -1,0 +1,13 @@
+*/__pycache__/
+__pycache__
+
+# ignore the pycharm and vscode project files
+.idea/
+.vscode/
+
+# ignore folders
+log/
+
+# pipfiles
+*.lock
+
