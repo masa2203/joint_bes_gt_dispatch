@@ -1,17 +1,12 @@
 import os
-import pickle
-import json
 import random
 import itertools
-from collections import deque
-from typing import Optional, Union, Tuple, Any, Deque, List, Dict
+from typing import Optional, List, Dict
 
 import numpy as np
 import pandas as pd
 import torch
 from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
-
-from utils.net_design import activation_fn_dict
 
 
 def set_seeds(seed):
@@ -25,8 +20,6 @@ def set_seeds(seed):
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
-    # torch.backends.cudnn.deterministic = True
-    # torch.backends.cudnn.benchmark = True
 
 
 def start_count(lst_of_actions_taken):
@@ -43,27 +36,6 @@ def start_count(lst_of_actions_taken):
         if lst_of_actions_taken[i] == 0 and lst_of_actions_taken[i + 1] != 0:
             count += 1
     return count
-
-
-def scaling(x: np.ndarray, lb: np.ndarray, ub: np.ndarray, operation: float):
-    """
-    Scales or unscales a 2D array of datapoints.
-
-    :param x: A 2D numpy array of size n * nsamples of datapoints.
-    :param lb: A 1D numpy array of length n that specifies the lower range of features.
-    :param ub: A 1D numpy array of length n that specifies the upper range of features.
-    :param operation: A string that indicates whether to scale or unscale.
-    :return: A 2D numpy array of size n * nsamples of unscaled datapoints.
-    """
-
-    if operation == 'scale':
-        # scale
-        x_out = (x - lb) / (ub - lb)
-        return x_out
-    elif operation == 'unscale':
-        # unscale
-        x_out = lb + x * (ub - lb)
-        return x_out
 
 
 def generate_discrete_actions(

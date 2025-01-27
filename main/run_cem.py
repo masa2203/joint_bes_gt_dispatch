@@ -20,8 +20,8 @@ SAVE_PATH = os.path.join(src_dir, 'log', ENV_KWARGS['env_name'], 'cem', 'run', i
 
 # EXP_PARAMS
 EXP_PARAMS = {
-    'n_runs': 3,
-    'n_iterations': 5,
+    'n_runs': 5,
+    'n_iterations': 50,
     'seed': 22,
     # Env
     'flatten_obs': True,  # requires changes in cem.py if set to False
@@ -31,11 +31,11 @@ EXP_PARAMS = {
     'norm_reward': False,
     # Hps
     'gamma': 1,
-    'size_hl': 64,
+    'size_hl': 128,
     'activation_fn': 'relu',
     'out_activ': None,  # or 'sigmoid'
     'layer_norm': True,
-    'pop_size': 10,
+    'pop_size': 40,
     'elite_frac': 0.1,
     'init_sigma': 0.2,  # controls gaussian noise added, initial value, decays linearly to final_sigma
     'final_sigma': 0.0001,  # controls gaussian noise added, final value

@@ -89,7 +89,7 @@ class RescaleActionSpace(gym.ActionWrapper):
         return reversed_action
 
 
-class TemporalInfoAdjustWrapper(gym.Wrapper):
+class TemporalInfoAdjustWrapper(gym.Wrapper):  # Needed for Tianshou
     def reset(self, **kwargs):
         obs, info = self.env.reset(**kwargs)
         return obs, {}
@@ -191,7 +191,7 @@ class PreDefinedDiscreteActions(gym.ActionWrapper):
 
         self.bes = self.env.unwrapped.storage_dict
 
-        self.avg_gt_max = 30.57931818493151  # in MW
+        self.avg_gt_max = 32.6  # in MW
         self.gt_tolerance = 0.00  # Increase GT action on [0,1] scale by this amount to compensate for amb. conditions
 
     def action(self, action):

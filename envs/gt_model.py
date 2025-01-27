@@ -568,9 +568,15 @@ class A35(AdvancedGTModel):
 
     @staticmethod
     def piecewise_linear_a35(action):
+        """
+        Approximates GT operation using a piecewise linear function that maps power to fuel
+
+        :param action: GT action in range [0,1].
+        :return: Dict containing the power (MW) and fuelflow (pph).
+        """
         gt_power = action * 32.61
-        approx1 = np.poly1d((700, 1550))
-        approx2 = np.poly1d((360, 2200))
+        approx1 = np.poly1d((700, 1550))  # First linear segment
+        approx2 = np.poly1d((360, 2200))  # Second linear segment
         if 0 < gt_power <= 1:
             fuelflow = approx1(gt_power)
         elif gt_power > 1:
@@ -718,6 +724,12 @@ class A05(AdvancedGTModel):
 
     @staticmethod
     def piecewise_linear_a05(action):
+        """
+        Approximates GT operation using a piecewise linear function that maps power to fuel
+
+        :param action: GT action in range [0,1].
+        :return: Dict containing the power (MW) and fuelflow (pph).
+        """
         gt_power = action * 6
         approx1 = np.poly1d((360, 800))
         if gt_power > 0.25:

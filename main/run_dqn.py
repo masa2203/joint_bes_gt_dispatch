@@ -26,13 +26,13 @@ SAVE_PATH = os.path.join(src_dir, 'log', ENV_KWARGS['env_name'], 'dqn', 'run', i
 # ACTIONS
 discretization_params = {
     'gt_specs': [
-        {'start': -1, 'stop': 1, 'num': 8},
-        # {'start': -1, 'stop': 1, 'num': 8},
+        {'start': -1, 'stop': 1, 'num': 8}  # First GT, CS1 best: 12
+        # {'start': -1, 'stop': 1, 'num': 8},  # Second GT ...
         # {'start': -1, 'stop': 1, 'num': 2},
         # {'start': -1, 'stop': 1, 'num': 2},
         # {'start': -1, 'stop': 1, 'num': 2}
     ],
-    'bes_specs': [{'start': -1, 'stop': 1, 'num': 19}],
+    'bes_specs': [{'start': -1, 'stop': 1, 'num': 19}],  # CS1 best: 12
 }
 DISCRETE_ACTIONS = generate_discrete_actions(**discretization_params)
 
@@ -45,7 +45,7 @@ EXP_PARAMS = {
     # Env
     'combine_gt_actions': False,
     'flatten_obs': True,
-    'frame_stack': 7,
+    'frame_stack': 7,  # CS1 best: 6
     # Normalization
     'norm_obs': True,
     'norm_reward': True,
@@ -58,24 +58,24 @@ EXP_PARAMS = {
 RL_PARAMS: dict[str, Any] = {
     'policy': "MlpPolicy" if EXP_PARAMS['flatten_obs'] else 'MultiInputPolicy',
     # 'learning_rate': 0.00037,  # Default: 1e-4
-    'learning_rate': linear_scheduler_sb3(0.00037),  # Default: 1e-4
-    'buffer_size': 1_000_000,  # Default: 1e6
-    'learning_starts': 1_000,  # Default: 50_000
-    'batch_size': 128,  # Default: 32
-    'tau': 0.335,  # Default: 1.0
-    'gamma': 0.965,  # Default: 0.99
-    'train_freq': 75,  # Default: 4
-    'gradient_steps': -1,  # Default: 1
-    'target_update_interval': 10_000,  # Default: 1e4
-    'exploration_fraction': 0.5,  # Default: 0.1
-    'exploration_initial_eps': 0.8,  # Default: 1.0
-    'exploration_final_eps': 0.01,  # Default: 0.05
-    'max_grad_norm': 0.6,  # Default: 10
+    'learning_rate': linear_scheduler_sb3(0.00037),  # Default: 1e-4, CS1 best: 0.00029
+    'buffer_size': 1_000_000,  # Default: 1e6, CS1 best: 1_000_000
+    'learning_starts': 1_000,  # Default: 50_000, CS1 best: 10_000
+    'batch_size': 128,  # Default: 32, CS1 best: 128
+    'tau': 0.335,  # Default: 1.0, CS1 best: 0.9188
+    'gamma': 0.965,  # Default: 0.99, CS1 best: 0.9996
+    'train_freq': 75,  # Default: 4, CS1 best: 58
+    'gradient_steps': -1,  # Default: 1, CS1 best: -1
+    'target_update_interval': 10_000,  # Default: 1e4, CS1 best: 1_000
+    'exploration_fraction': 0.5,  # Default: 0.1, CS1 best: 0.25
+    'exploration_initial_eps': 0.8,  # Default: 1.0, CS1 best: 1.0
+    'exploration_final_eps': 0.01,  # Default: 0.05, CS1 best: 0.01
+    'max_grad_norm': 0.6,  # Default: 10, CS1 best: 5
 
     'policy_kwargs': {
         # Defaults reported for MultiInputPolicy
-        'net_arch': 'extra_large',  # Default: None
-        'activation_fn': 'leaky_relu',  # Default: tanh
+        'net_arch': 'extra_large',  # Default: None, CS1 best: 'large'
+        'activation_fn': 'leaky_relu',  # Default: tanh, CS1 best: 'leaky_relu'
     }
 }
 

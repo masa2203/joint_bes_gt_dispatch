@@ -31,13 +31,13 @@ ACTION_DIM = make_env(ENV, ENV_KWARGS).action_space.shape[-1]
 
 # EXP PARAMS
 EXP_PARAMS = {
-    'n_runs': 3,
-    'n_episodes': 1,
+    'n_runs': 5,
+    'n_episodes': 200,
     'len_episode': int(ENV_KWARGS['modeling_period_h'] / ENV_KWARGS['resolution_h']),
     'seed': 22,
     # Env
     'flatten_obs': True,
-    'frame_stack': 4,
+    'frame_stack': 4,  # CS1 best: 1
     # Normalization
     'norm_obs': True,
     'norm_reward': True,
@@ -51,25 +51,24 @@ RL_PARAMS: dict[str, Any] = {
     'policy': "MlpPolicy" if EXP_PARAMS['flatten_obs'] else 'MultiInputPolicy',
     # 'device': 'cpu',
     # 'learning_rate': 0.001,  # Default: 1e-3
-    'learning_rate': linear_scheduler_sb3(0.00118),  # Default: 3e-4
-    'buffer_size': 1_000_000,  # Default: 1M
-    'learning_starts': 10_000,  # Default: 100
-    'batch_size': 256,  # Default: 256
-    'tau': 0.00065,  # Default: 0.005
-    'gamma': 0.9885,  # Default: 0.99
-    'train_freq': 2,  # Default: 1
-    'gradient_steps': 5,  # Default: 1
-    # 'action_noise': None,  # Default: None
-    'action_noise': NormalActionNoise(mean=np.zeros(ACTION_DIM), sigma=0.1 * np.ones(ACTION_DIM)),  # Default: None
-    'policy_delay': 2,  # Default: 2
-    'target_policy_noise': 0.3,  # Default: 0.2
-    'target_noise_clip': 0.4,  # Default: 0.5
+    'learning_rate': linear_scheduler_sb3(0.00118),  # Default: 1e-3, CS1 best:
+    'buffer_size': 1_000_000,  # Default: 1M, CS1 best: 1M
+    'learning_starts': 10_000,  # Default: 100, CS1 best: 1_000
+    'batch_size': 256,  # Default: 256, CS1 best: 256
+    'tau': 0.00065,  # Default: 0.005, CS1 best: 0.0053
+    'gamma': 0.9885,  # Default: 0.99, CS1 best: 0.9983
+    'train_freq': 2,  # Default: 1, CS1 best: 10
+    'gradient_steps': 5,  # Default: 1, CS1 best: -1
+    'action_noise': NormalActionNoise(mean=np.zeros(ACTION_DIM), sigma=0.1 * np.ones(ACTION_DIM)),  # Default: None, CS1 best: same
+    'policy_delay': 2,  # Default: 2, CS1 best: 2
+    'target_policy_noise': 0.3,  # Default: 0.2, CS1 best: 0.2
+    'target_noise_clip': 0.4,  # Default: 0.5, CS1 best: 0.4
 
     'policy_kwargs': {
         # Defaults reported for MultiInputPolicy
-        'net_arch': 'ddpg',  # Default: None
-        'activation_fn': 'relu',  # Default: 'relu'
-        'n_critics': 2,  # Default: 2
+        'net_arch': 'ddpg',  # Default: None, CS1 best:
+        'activation_fn': 'relu',  # Default: 'relu', CS1 best: 'leaky_relu'
+        'n_critics': 2,  # Default: 2, CS1 best: 2
     }
 }
 

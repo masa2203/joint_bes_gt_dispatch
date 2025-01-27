@@ -12,10 +12,9 @@ from utils.logger import sb3_create_stats_file
 from train.train import train_rl_agent
 
 # PLANT PARAMS
-# ENV = GasTurbineBatteryRenewablesDemandEnv
-# ENV_KWARGS = on1_gt_bes_re
-ENV = CS3GtBesEnv
-ENV_KWARGS = cs3
+ENV = GasTurbineBatteryRenewablesDemandEnv
+ENV_KWARGS = cs2_base
+
 
 # LOG
 CREATE_LOG = True
@@ -30,15 +29,15 @@ DISCRETE_ACTIONS = None
 
 # EXP PARAMS
 EXP_PARAMS = {
-    'n_runs': 1,
-    'n_episodes': 10,
+    'n_runs': 5,
+    'n_episodes': 200,
     'len_episode': int(ENV_KWARGS['modeling_period_h'] / ENV_KWARGS['resolution_h']),
     'seed': 22,
     # Env
     'combine_gt_actions': False,
     'use_predefined_discrete_actions': True,  # USES PREDEFINED DISCRETE ACTIONS
     'flatten_obs': True,
-    'frame_stack': 7,
+    'frame_stack': 1,
     # Normalization
     'norm_obs': True,
     'norm_reward': True,
@@ -51,19 +50,19 @@ EXP_PARAMS = {
 RL_PARAMS: dict[str, Any] = {
     'policy': "MlpPolicy" if EXP_PARAMS['flatten_obs'] else 'MultiInputPolicy',
     # 'learning_rate': 0.000373343249282699,  # Default: 1e-4
-    'learning_rate': linear_scheduler_sb3(0.00037),  # Default: 1e-4
+    'learning_rate': linear_scheduler_sb3(0.00039),  # Default: 1e-4
     'buffer_size': 1_000_000,  # Default: 1e6
     'learning_starts': 1_000,  # Default: 50_000
     'batch_size': 128,  # Default: 32
-    'tau': 0.335,  # Default: 1.0
-    'gamma': 0.965,  # Default: 0.99
+    'tau': 0.96,  # Default: 1.0
+    'gamma': 0.9904,  # Default: 0.99
     'train_freq': 75,  # Default: 4
     'gradient_steps': -1,  # Default: 1
-    'target_update_interval': 10_000,  # Default: 1e4
+    'target_update_interval': 1_000,  # Default: 1e4
     'exploration_fraction': 0.5,  # Default: 0.1
     'exploration_initial_eps': 0.8,  # Default: 1.0
     'exploration_final_eps': 0.01,  # Default: 0.05
-    'max_grad_norm': 0.6,  # Default: 10
+    'max_grad_norm': 4.93,  # Default: 10
 
     'policy_kwargs': {
         # Defaults reported for MultiInputPolicy

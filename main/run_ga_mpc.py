@@ -12,7 +12,7 @@ start = time.time()
 
 # PLANT PARAMS
 ENV = GasTurbineBatteryRenewablesDemandEnv
-ENV_KWARGS = cs2_base
+ENV_KWARGS = cs1
 
 env = ENV(**ENV_KWARGS, tracking=True, precision_level="low")
 
@@ -26,10 +26,10 @@ seed = 22
 
 # EXP PARAMS
 ga_params = {
-    'len_horizon': 6,  # length of rollouts over which GA optimizes
-    'n_iter': 200,  # iterations/generations done per optimization loop
-    'n_bits_per_action': 4,  # bits used to encode one action dimension
-    'n_pop': 100,  # population size
+    'len_horizon': 12,  # length of rollouts over which GA optimizes,  CS2 best: 6
+    'n_iter': 500,  # iterations/generations done per optimization loop,  CS2 best: 200
+    'n_bits_per_action': 4,  # bits used to encode one action dimension,  CS2 best: 4
+    'n_pop': 1_000,  # population size,  CS2 best: 100
     'r_cross': 0.9,  # crossover rate, 1 - r_cross will be parent clones
     'r_mut': 0.025,  # mutation rate
     'allow_battery_idle': True,  # change binary encoding for battery to enable idle

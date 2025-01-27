@@ -2,13 +2,8 @@ import os
 import time
 import warnings
 import pandas as pd
-import pickle
 import json
 import numpy as np
-from typing import Optional
-
-import optuna
-from optuna.visualization import plot_optimization_history, plot_param_importances
 
 from tianshou.env import BaseVectorEnv, DummyVectorEnv
 from stable_baselines3.common.vec_env import VecNormalize, DummyVecEnv
@@ -93,7 +88,7 @@ def get_env_log_data(env, mean_reward, start_time):
             gt_actions = np.expand_dims(gt_actions, axis=-1)  # Make single GT actions 2D
 
         # Calculate operating hours and starts
-        gt_oper_hours = [sum(1 for action in gt if action > 0) for gt in gt_actions.T]
+        gt_oper_time = [sum(1 for action in gt if action > 0) for gt in gt_actions.T]
         number_of_starts = [start_count(gt) for gt in gt_actions.T]
 
         # Calculate average loads
@@ -125,7 +120,7 @@ def get_env_log_data(env, mean_reward, start_time):
             'maint_cost_sum': maint_cost_sum,
             'avg_GT_load': avg_gt_load,
             'avg_GT_load_when_on': avg_gt_load_when_on,
-            'operating_hours_GT': gt_oper_hours,
+            'operating_time_GT': gt_oper_time,
             'number_of_starts': number_of_starts,
         }
         stats = stats | gt_stats
@@ -329,49 +324,3 @@ def cem_create_stats_file(path: str, len_episode: int):
     print('Mean episodic rewards over all runs: ')
     print()
     print(mean_row)
-
-
-def print_and_save_tune_logs(study: optuna.study,
-                             save_path: Optional[str],
-                             run_id: str
-                             ):
-    """
-    Prints and saves the results of an Optuna study.
-
-    :param study: An optuna study object.
-    :param save_path: A string that represents the path to the directory where the results will be saved.
-    :param run_id: A string that represents the ID of the run.
-    """
-    print("Number of finished trials: ", len(study.trials))
-
-    print("Best trial:")
-    best_trial = study.best_trial
-
-    print(f"  Value: {best_trial.value}")
-
-    print("  Params: ")
-    for key, value in best_trial.params.items():
-        print(f"    {key}: {value}")
-
-    print("  User attrs:")
-    for key, value in best_trial.user_attrs.items():
-        print(f"    {key}: {value}")
-
-    if save_path is not None:
-        # Write report
-        study.trials_dataframe().to_csv(os.path.join(save_path, "results.csv"))
-        # Save sampler
-        with open(os.path.join(save_path, "sampler.pkl"), "wb") as fout:
-            pickle.dump(study.sampler, fout)
-
-    fig1 = plot_optimization_history(study)
-    fig2 = plot_param_importances(study)
-
-    if save_path is not None:
-        # Not that saving freezes with the most recent version of Kaleido, an older version must be installed.
-        # See: https://github.com/plotly/Kaleido/issues/134
-        fig1.write_image(os.path.join(save_path, f"history_{run_id}.png"))
-        fig2.write_image(os.path.join(save_path, f"importance_{run_id}.png"))
-    else:
-        fig1.show()
-        fig2.show()

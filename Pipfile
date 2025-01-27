@@ -5,12 +5,9 @@ name = "pypi"
 
 [packages]
 numpy = "*"
-OMADS = "*"
-optuna = "*"
 pandas = "*"
 gymnasium = "*"
 stable-baselines3 = "*"
-rainflow = "*"
 tqdm = "*"
 rich = "*"
 plotly = "*"

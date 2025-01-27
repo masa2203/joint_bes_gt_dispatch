@@ -37,38 +37,38 @@ EXP_PARAMS = {
     'seed': 22,
     # Env
     'flatten_obs': True,
-    'frame_stack': 9,
+    'frame_stack': 8,
     # Normalization
     'norm_obs': True,
     'norm_reward': True,
     # Evaluation
     'eval_while_training': True,
-    'eval_freq': int(ENV_KWARGS['modeling_period_h'] / ENV_KWARGS['resolution_h']) * 1,
+    'eval_freq': int(ENV_KWARGS['modeling_period_h'] / ENV_KWARGS['resolution_h']) * 100,
 }
 
 # PPO PARAMS
 RL_PARAMS: dict[str, Any] = {
     'policy': "MlpPolicy" if EXP_PARAMS['flatten_obs'] else 'MultiInputPolicy',
     # 'device': 'cpu',
-    'learning_rate': 0.0010878,  # Default: 3e-4
-    'buffer_size': 500_000,  # Default: 1M
-    'learning_starts': 10_000,  # Default: 100
-    'batch_size': 128,  # Default: 256
-    'tau': 0.006418,  # Default: 0.005
-    'gamma': 0.952198,  # Default: 0.99
-    'train_freq': 250,  # Default: 1
-    'gradient_steps': -1,  # Default: 1
-    'action_noise': None,  # Default: None
-    # 'action_noise': NormalActionNoise(mean=np.zeros(ACTION_DIM), sigma=0.1 * np.ones(ACTION_DIM)),  # Default: None
-    'ent_coef': 'auto_0.1',  # Default: 'auto'
-    'target_update_interval': 2,  # Default: 1
+    'learning_rate': 0.00566,  # Default: 3e-4
+    'buffer_size': 1_000_000,  # Default: 1M
+    'learning_starts': 1_000,  # Default: 100
+    'batch_size': 256,  # Default: 256
+    'tau': 0.005,  # Default: 0.005
+    'gamma': 0.99969,  # Default: 0.99
+    'train_freq': 1,  # Default: 1
+    'gradient_steps': 1,  # Default: 1
+    'action_noise': NormalActionNoise(mean=np.zeros(ACTION_DIM), sigma=0.1 * np.ones(ACTION_DIM)),  # Default: None
+    'ent_coef': 'auto',  # Default: 'auto'
+    'target_update_interval': 1,  # Default: 1
     'target_entropy': 'auto',  # Default: 'auto
 
     'policy_kwargs': {
         # Defaults reported for MultiInputPolicy
         'net_arch': 'sac',  # Default: None
-        'activation_fn': 'leaky_relu',  # Default: 'relu'
-        'n_critics': 2,  # Default: 2
+        'activation_fn': 'relu',  # Default: 'relu'
+        'n_critics': 1,  # Default: 2
+        'share_features_extractor': True,
     }
 }
 
