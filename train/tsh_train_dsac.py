@@ -194,10 +194,7 @@ def tsh_train_dsac_agent(
         print(f'Execution time = {train_result.timing.total_time}')
 
     if run_path is not None:
-        stats = train_result.__dict__
-        stats['timing'] = stats['timing'].__dict__
         log_data = get_env_log_data(env=test_env, mean_reward=final_eval.returns.mean(), start_time=start)
-        log_data = log_data | stats
         with open(os.path.join(run_path, 'output.json'), 'w') as f:
             json.dump(log_data, f)
 
