@@ -27,8 +27,8 @@ SAVE_PATH = os.path.join(src_dir, 'log', ENV_KWARGS['env_name'], 'ppo', 'run', i
 
 # ACTIONS
 discretization_params = {
-    'gt_specs': [{'start': -1, 'stop': 1, 'num': 13}],  # CS1 best: 6 (disc.)
-    'bes_specs': [{'start': -1, 'stop': 1, 'num': 8}],  # CS1 best: 14 (disc.)
+    'gt_specs': [{'start': -1, 'stop': 1, 'num': 12}],  # CS1 best: 6 (disc.)
+    'bes_specs': [{'start': -1, 'stop': 1, 'num': 7}],  # CS1 best: 14 (disc.)
 }
 # DISCRETE_ACTIONS = None  # None -> continuous PPO
 DISCRETE_ACTIONS = generate_discrete_actions(**discretization_params)
@@ -42,7 +42,7 @@ EXP_PARAMS = {
     'seed': 22,
     # Env
     'flatten_obs': True,
-    'frame_stack': 1,  # CS1 best: 5 (disc.) | 1 (cont.)
+    'frame_stack': 2,  # CS1 best: 5 (disc.) | 1 (cont.)
     # Normalization
     'norm_obs': True,
     'norm_reward': True,
@@ -55,29 +55,29 @@ EXP_PARAMS = {
 RL_PARAMS: dict[str, Any] = {
     'policy': "MlpPolicy" if EXP_PARAMS['flatten_obs'] else 'MultiInputPolicy',
     'device': 'cpu',
-    'learning_rate': linear_scheduler_sb3(0.000739109639891389),  # Default: 3e-4, CS1 best: 0.000739 (disc.) | 0.000662 (cont.)
+    'learning_rate': linear_scheduler_sb3(0.000311),  # Default: 3e-4, CS1 best: 0.000739 (disc.) | 0.000662 (cont.)
     'n_steps': 2048,  # Default: 2048, CS1 best: 512 (disc.) | 512 (cont.)
     'batch_size': 512,  # Default: 64, CS1 best: 256 (disc.) | 64 (cont.)
     'n_epochs': 20,  # Default: 10, CS1 best: 5 (disc.) | 10 (cont.)
-    'gamma': 0.9040311190204684,  # Default: 0.99, CS1 best: 0.99997 (disc.) | 0.9985 (cont.)
-    'gae_lambda': 0.9490833250619164,  # Default: 0.95, CS1 best: 0.91006 (disc.) | 0.9175 (cont.)
-    'clip_range': 0.299162760983835,  # Default: 0.2, CS1 best: 0.3 (disc.) | 0.1 (cont.)
-    'clip_range_vf': linear_scheduler_sb3(0.3),  # Default: None, CS1 best: 0.3 (disc.) | 0.2 (cont.)
+    'gamma': 0.9096,  # Default: 0.99, CS1 best: 0.99997 (disc.) | 0.9985 (cont.)
+    'gae_lambda': 0.9126,  # Default: 0.95, CS1 best: 0.91006 (disc.) | 0.9175 (cont.)
+    'clip_range': 0.1,  # Default: 0.2, CS1 best: 0.3 (disc.) | 0.1 (cont.)
+    'clip_range_vf': 0.2,  # Default: None, CS1 best: 0.3 (disc.) | 0.2 (cont.)
     'normalize_advantage': True,  # Default: True, CS1 best: True (disc.) | True (cont.)
-    'ent_coef': 0.237273583000828,  # Default: 0.0, CS1 best: 0.23727 (disc.) | 0.0 (cont.)
-    'vf_coef': 0.740664718469597,  # Default: 0.5, CS1 best: 0.74066 (disc.) | 0.5 (cont.)
-    'max_grad_norm': 2.50805793585801,  # Default: 0.5, CS1 best: 2.508 (disc.) | 0.5 (cont.)
+    'ent_coef': 0.0,  # Default: 0.0, CS1 best: 0.23727 (disc.) | 0.0 (cont.)
+    'vf_coef': 0.5,  # Default: 0.5, CS1 best: 0.74066 (disc.) | 0.5 (cont.)
+    'max_grad_norm': 0.277,  # Default: 0.5, CS1 best: 2.508 (disc.) | 0.5 (cont.)
     'use_sde': False,  # Default: False, CS1 best: False (disc.) | False (cont.)
     'target_kl': None,  # Default: None, CS1 best: None (disc.) | None (cont.)
 
     'policy_kwargs': {
         # Defaults reported for MultiInputPolicy
-        'net_arch': 'large',  # Default: None, CS1 best: 'large' (disc.) | 'large' (cont.)
+        'net_arch': 'extra_large',  # Default: None, CS1 best: 'large' (disc.) | 'large' (cont.)
         'activation_fn': 'relu',  # Default: tanh, CS1 best: 'relu' (disc.) | 'relu' (cont.)
-        'ortho_init': False,  # Default: True, CS1 best: False (disc.) | True (cont.)
+        'ortho_init': True,  # Default: True, CS1 best: False (disc.) | True (cont.)
         'use_expln': False,  # Default: False, CS1 best: False (disc.) | False (cont.)
         'squash_output': False,  # Default: False, CS1 best: False (disc.) | False (cont.)
-        'share_features_extractor': True,  # Default: True, CS1 best: True (disc.) | True (cont.)
+        'share_features_extractor': False,  # Default: True, CS1 best: True (disc.) | True (cont.)
     }
 }
 
